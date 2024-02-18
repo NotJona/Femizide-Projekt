@@ -1,0 +1,529 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="css/leaflet.css">
+        <link rel="stylesheet" href="css/qgis2web.css"><link rel="stylesheet" href="css/fontawesome-all.min.css">
+        <link rel="stylesheet" href="css/filter.css">
+<link rel="stylesheet" href="css/nouislider.min.css">
+        <style>
+        #map {
+            width: 1505px;
+            height: 927px;
+        }
+        </style>
+        <title></title>
+    </head>
+    <body>
+        <div id="map">
+        </div>
+        <script src="js/qgis2web_expressions.js"></script>
+        <script src="js/leaflet.js"></script>
+        <script src="js/leaflet.rotatedMarker.js"></script>
+        <script src="js/leaflet.pattern.js"></script>
+        <script src="js/leaflet-hash.js"></script>
+        <script src="js/Autolinker.min.js"></script>
+        <script src="js/rbush.min.js"></script>
+        <script src="js/labelgun.min.js"></script>
+        <script src="js/labels.js"></script>
+        <script src="js/tailDT.js"></script>
+<script src="js/nouislider.min.js"></script>
+<script src="js/wNumb.js"></script>
+        <script src="data/BeziehungOpferTter_1.js"></script>
+        <script>
+        var highlightLayer;
+        function highlightFeature(e) {
+            highlightLayer = e.target;
+            highlightLayer.openPopup();
+        }
+        var map = L.map('map', {
+            zoomControl:true, maxZoom:28, minZoom:1
+        }).fitBounds([[47.89709447019452,15.769209347997894],[48.42342666669747,17.05131717082593]]);
+        var hash = new L.Hash(map);
+        map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
+        var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
+        function removeEmptyRowsFromPopupContent(content, feature) {
+         var tempDiv = document.createElement('div');
+         tempDiv.innerHTML = content;
+         var rows = tempDiv.querySelectorAll('tr');
+         for (var i = 0; i < rows.length; i++) {
+             var td = rows[i].querySelector('td.visible-with-data');
+             var key = td ? td.id : '';
+             if (td && td.classList.contains('visible-with-data') && feature.properties[key] == null) {
+                 rows[i].parentNode.removeChild(rows[i]);
+             }
+         }
+         return tempDiv.innerHTML;
+        }
+        document.querySelector(".leaflet-popup-pane").addEventListener("load", function(event) {
+          var tagName = event.target.tagName,
+            popup = map._popup;
+          // Also check if flag is already set.
+          if (tagName === "IMG" && popup && !popup._updated) {
+            popup._updated = true; // Set flag to prevent looping.
+            popup.update();
+          }
+        }, true);
+        var bounds_group = new L.featureGroup([]);
+        function setBounds() {
+        }
+        map.createPane('pane_CartoLight_0');
+        map.getPane('pane_CartoLight_0').style.zIndex = 400;
+        var layer_CartoLight_0 = L.tileLayer('https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.pn', {
+            pane: 'pane_CartoLight_0',
+            opacity: 1.0,
+            attribution: '',
+            minZoom: 1,
+            maxZoom: 28,
+        });
+        layer_CartoLight_0;
+        map.addLayer(layer_CartoLight_0);
+        function pop_BeziehungOpferTter_1(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    if (typeof layer.closePopup == 'function') {
+                        layer.closePopup();
+                    } else {
+                        layer.eachLayer(function(feature){
+                            feature.closePopup()
+                        });
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['fid'] !== null ? autolinker.link(feature.properties['fid'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Field2'] !== null ? autolinker.link(feature.properties['Field2'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Field3'] !== null ? autolinker.link(feature.properties['Field3'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Field4'] !== null ? autolinker.link(feature.properties['Field4'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Field5'] !== null ? autolinker.link(feature.properties['Field5'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Field6'] !== null ? autolinker.link(feature.properties['Field6'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Field7'] !== null ? autolinker.link(feature.properties['Field7'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Field8'] !== null ? autolinker.link(feature.properties['Field8'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Field9'] !== null ? autolinker.link(feature.properties['Field9'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Field10'] !== null ? autolinker.link(feature.properties['Field10'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Field11'] !== null ? autolinker.link(feature.properties['Field11'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Täter-Opfer Beziehung '] !== null ? autolinker.link(feature.properties['Täter-Opfer Beziehung '].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Alter Opfer'] !== null ? autolinker.link(feature.properties['Alter Opfer'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Alter Täter (0= unbekannt und 100= mehrere Täter)'] !== null ? autolinker.link(feature.properties['Alter Täter (0= unbekannt und 100= mehrere Täter)'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+            var popup = layer.getPopup();
+            var content = popup.getContent();
+            var updatedContent = removeEmptyRowsFromPopupContent(content, feature);
+            popup.setContent(updatedContent);
+        }
+
+        function style_BeziehungOpferTter_1_0(feature) {
+            switch(String(feature.properties['Field5'])) {
+                case 'Bekannte':
+                    return {
+                pane: 'pane_BeziehungOpferTter_1',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(85,226,19,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Familie':
+                    return {
+                pane: 'pane_BeziehungOpferTter_1',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(226,82,50,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Fremde':
+                    return {
+                pane: 'pane_BeziehungOpferTter_1',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(189,126,218,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Freunde':
+                    return {
+                pane: 'pane_BeziehungOpferTter_1',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(211,64,147,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'noch unbekannt':
+                    return {
+                pane: 'pane_BeziehungOpferTter_1',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(34,196,233,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Partner':
+                    return {
+                pane: 'pane_BeziehungOpferTter_1',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(99,206,146,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'unbekannt':
+                    return {
+                pane: 'pane_BeziehungOpferTter_1',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(212,203,73,1.0)',
+                interactive: true,
+            }
+                    break;
+                default:
+                    return {
+                pane: 'pane_BeziehungOpferTter_1',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(111,118,212,1.0)',
+                interactive: true,
+            }
+                    break;
+            }
+        }
+        map.createPane('pane_BeziehungOpferTter_1');
+        map.getPane('pane_BeziehungOpferTter_1').style.zIndex = 401;
+        map.getPane('pane_BeziehungOpferTter_1').style['mix-blend-mode'] = 'normal';
+        var layer_BeziehungOpferTter_1 = new L.geoJson(json_BeziehungOpferTter_1, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_BeziehungOpferTter_1',
+            layerName: 'layer_BeziehungOpferTter_1',
+            pane: 'pane_BeziehungOpferTter_1',
+            onEachFeature: pop_BeziehungOpferTter_1,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_BeziehungOpferTter_1_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_BeziehungOpferTter_1);
+        map.addLayer(layer_BeziehungOpferTter_1);
+        setBounds();
+        var mapDiv = document.getElementById('map');
+        var row = document.createElement('div');
+        row.className="row";
+        row.id="all";
+        row.style.height = "100%";
+        var col1 = document.createElement('div');
+        col1.className="col9";
+        col1.id = "mapWindow";
+        col1.style.height = "99%";
+        col1.style.width = "80%";
+        col1.style.display = "inline-block";
+        var col2 = document.createElement('div');
+        col2.className="col3";
+        col2.id = "menu";
+        col2.style.display = "inline-block";
+        mapDiv.parentNode.insertBefore(row, mapDiv);
+        document.getElementById("all").appendChild(col1);
+        document.getElementById("all").appendChild(col2);
+        col1.appendChild(mapDiv)
+        var Filters = {"Alter Täter (0= unbekannt und 100= mehrere Täter)": "int","Alter Opfer": "int","Täter-Opfer Beziehung ": "str"};
+        function filterFunc() {
+          map.eachLayer(function(lyr){
+          if ("options" in lyr && "dataVar" in lyr["options"]){
+            features = this[lyr["options"]["dataVar"]].features.slice(0);
+            try{
+              for (key in Filters){
+                keyS = key.replace(/[^a-zA-Z0-9_]/g, "")
+                if (Filters[key] == "str" || Filters[key] == "bool"){
+                  var selection = [];
+                  var options = document.getElementById("sel_" + keyS).options
+                  for (var i=0; i < options.length; i++) {
+                    if (options[i].selected) selection.push(options[i].value);
+                  }
+                    try{
+                      if (key in features[0].properties){
+                        for (i = features.length - 1;
+                          i >= 0; --i){
+                          if (selection.indexOf(
+                          features[i].properties[key])<0
+                          && selection.length>0) {
+                          features.splice(i,1);
+                          }
+                        }
+                      }
+                    } catch(err){
+                  }
+                }
+                if (Filters[key] == "int"){
+                  sliderVals =  document.getElementById(
+                    "div_" + keyS).noUiSlider.get();
+                  try{
+                    if (key in features[0].properties){
+                    for (i = features.length - 1; i >= 0; --i){
+                      if (parseInt(features[i].properties[key])
+                          < sliderVals[0]
+                          || parseInt(features[i].properties[key])
+                          > sliderVals[1]){
+                            features.splice(i,1);
+                          }
+                        }
+                      }
+                    } catch(err){
+                    }
+                  }
+                if (Filters[key] == "real"){
+                  sliderVals =  document.getElementById(
+                    "div_" + keyS).noUiSlider.get();
+                  try{
+                    if (key in features[0].properties){
+                    for (i = features.length - 1; i >= 0; --i){
+                      if (features[i].properties[key]
+                          < sliderVals[0]
+                          || features[i].properties[key]
+                          > sliderVals[1]){
+                            features.splice(i,1);
+                          }
+                        }
+                      }
+                    } catch(err){
+                    }
+                  }
+                if (Filters[key] == "date"
+                  || Filters[key] == "datetime"
+                  || Filters[key] == "time"){
+                  try{
+                    if (key in features[0].properties){
+                      HTMLkey = key.replace(/[&\/\\#,+()$~%.'":*?<>{} ]/g, '');
+                      startdate = document.getElementById("dat_" +
+                        HTMLkey + "_date1").value.replace(" ", "T");
+                      enddate = document.getElementById("dat_" +
+                        HTMLkey + "_date2").value.replace(" ", "T");
+                      for (i = features.length - 1; i >= 0; --i){
+                        if (features[i].properties[key] < startdate
+                          || features[i].properties[key] > enddate){
+                          features.splice(i,1);
+                        }
+                      }
+                    }
+                  } catch(err){
+                  }
+                }
+              }
+            } catch(err){
+            }
+          this[lyr["options"]["layerName"]].clearLayers();
+          this[lyr["options"]["layerName"]].addData(features);
+          }
+          })
+        }
+            document.getElementById("menu").appendChild(
+                document.createElement("div"));
+            var div_AlterTter0unbekanntund100mehrereTter = document.createElement("div");
+            div_AlterTter0unbekanntund100mehrereTter.id = "div_AlterTter0unbekanntund100mehrereTter";
+            div_AlterTter0unbekanntund100mehrereTter.className = "slider";
+            document.getElementById("menu").appendChild(div_AlterTter0unbekanntund100mehrereTter);
+            var lab_AlterTter0unbekanntund100mehrereTter = document.createElement('div');
+            lab_AlterTter0unbekanntund100mehrereTter.innerHTML  = 'Alter Täter (0= unbekannt und 100= mehrere Täter): <span id="val_AlterTter0unbekanntund100mehrereTter"></span>';
+            lab_AlterTter0unbekanntund100mehrereTter.className = 'filterlabel';
+            document.getElementById("menu").appendChild(lab_AlterTter0unbekanntund100mehrereTter);
+            var reset_AlterTter0unbekanntund100mehrereTter = document.createElement('div');
+            reset_AlterTter0unbekanntund100mehrereTter.innerHTML = 'clear filter';
+            reset_AlterTter0unbekanntund100mehrereTter.className = 'filterlabel';
+            lab_AlterTter0unbekanntund100mehrereTter.className = 'filterlabel';
+            reset_AlterTter0unbekanntund100mehrereTter.onclick = function() {
+                sel_AlterTter0unbekanntund100mehrereTter.noUiSlider.reset();
+            };
+            document.getElementById("menu").appendChild(reset_AlterTter0unbekanntund100mehrereTter);
+            var sel_AlterTter0unbekanntund100mehrereTter = document.getElementById('div_AlterTter0unbekanntund100mehrereTter');
+            noUiSlider.create(sel_AlterTter0unbekanntund100mehrereTter, {
+                connect: true,
+                start: [0, 100],
+                step: 1,
+                format: wNumb({
+                    decimals: 0,
+                    }),
+                range: {
+                min: 0,
+                max: 100
+                }
+            });
+            sel_AlterTter0unbekanntund100mehrereTter.noUiSlider.on('update', function (values) {
+            filterVals =[];
+            for (value in values){
+            filterVals.push(parseInt(value))
+            }
+            val_AlterTter0unbekanntund100mehrereTter = document.getElementById('val_AlterTter0unbekanntund100mehrereTter');
+            val_AlterTter0unbekanntund100mehrereTter.innerHTML = values.join(' - ');
+                filterFunc()
+            });
+            document.getElementById("menu").appendChild(
+                document.createElement("div"));
+            var div_AlterOpfer = document.createElement("div");
+            div_AlterOpfer.id = "div_AlterOpfer";
+            div_AlterOpfer.className = "slider";
+            document.getElementById("menu").appendChild(div_AlterOpfer);
+            var lab_AlterOpfer = document.createElement('div');
+            lab_AlterOpfer.innerHTML  = 'Alter Opfer: <span id="val_AlterOpfer"></span>';
+            lab_AlterOpfer.className = 'filterlabel';
+            document.getElementById("menu").appendChild(lab_AlterOpfer);
+            var reset_AlterOpfer = document.createElement('div');
+            reset_AlterOpfer.innerHTML = 'clear filter';
+            reset_AlterOpfer.className = 'filterlabel';
+            lab_AlterOpfer.className = 'filterlabel';
+            reset_AlterOpfer.onclick = function() {
+                sel_AlterOpfer.noUiSlider.reset();
+            };
+            document.getElementById("menu").appendChild(reset_AlterOpfer);
+            var sel_AlterOpfer = document.getElementById('div_AlterOpfer');
+            noUiSlider.create(sel_AlterOpfer, {
+                connect: true,
+                start: [0, 92],
+                step: 1,
+                format: wNumb({
+                    decimals: 0,
+                    }),
+                range: {
+                min: 0,
+                max: 92
+                }
+            });
+            sel_AlterOpfer.noUiSlider.on('update', function (values) {
+            filterVals =[];
+            for (value in values){
+            filterVals.push(parseInt(value))
+            }
+            val_AlterOpfer = document.getElementById('val_AlterOpfer');
+            val_AlterOpfer.innerHTML = values.join(' - ');
+                filterFunc()
+            });
+            document.getElementById("menu").appendChild(
+                document.createElement("div"));
+            var div_TterOpferBeziehung = document.createElement('div');
+            div_TterOpferBeziehung.id = "div_TterOpferBeziehung";
+            div_TterOpferBeziehung.className= "filterselect";
+            document.getElementById("menu").appendChild(div_TterOpferBeziehung);
+            sel_TterOpferBeziehung = document.createElement('select');
+            sel_TterOpferBeziehung.multiple = true;
+            sel_TterOpferBeziehung.size = 7;
+            sel_TterOpferBeziehung.id = "sel_TterOpferBeziehung";
+            var TterOpferBeziehung_options_str = "<option value='' unselected></option>";
+            sel_TterOpferBeziehung.onchange = function(){filterFunc()};
+            TterOpferBeziehung_options_str  += '<option value="Bekannte">Bekannte</option>';
+            TterOpferBeziehung_options_str  += '<option value="Familie">Familie</option>';
+            TterOpferBeziehung_options_str  += '<option value="Fremde">Fremde</option>';
+            TterOpferBeziehung_options_str  += '<option value="Freunde">Freunde</option>';
+            TterOpferBeziehung_options_str  += '<option value="Partner">Partner</option>';
+            TterOpferBeziehung_options_str  += '<option value="noch unbekannt">noch unbekannt</option>';
+            TterOpferBeziehung_options_str  += '<option value="unbekannt">unbekannt</option>';
+            sel_TterOpferBeziehung.innerHTML = TterOpferBeziehung_options_str;
+            div_TterOpferBeziehung.appendChild(sel_TterOpferBeziehung);
+            var lab_TterOpferBeziehung = document.createElement('div');
+            lab_TterOpferBeziehung.innerHTML = 'Täter-Opfer Beziehung ';
+            lab_TterOpferBeziehung.className = 'filterlabel';
+            div_TterOpferBeziehung.appendChild(lab_TterOpferBeziehung);
+            var reset_TterOpferBeziehung = document.createElement('div');
+            reset_TterOpferBeziehung.innerHTML = 'clear filter';
+            reset_TterOpferBeziehung.className = 'filterlabel';
+            reset_TterOpferBeziehung.onclick = function() {
+                var options = document.getElementById("sel_TterOpferBeziehung").options;
+                for (var i=0; i < options.length; i++) {
+                    options[i].selected = false;
+                }
+                filterFunc();
+            };
+            div_TterOpferBeziehung.appendChild(reset_TterOpferBeziehung);
+        </script>
+    </body>
+</html>
